@@ -27,7 +27,7 @@
                     <li class="list-group-item">Цена: {{ book.price }}p.</li>
                 </ul>
                 <div class="card-body">
-                    <a href="/" class="btn btn-primary" role="button">Купить</a>
+                    <a href="/book" class="btn btn-primary" role="button">Купить</a>
                 </div>
             </div>
         </div>

@@ -14,7 +14,8 @@ store = store.Store()
 @view('index')
 def home():
     """Home page"""
-    return {
+    return 
+    {
         'title': 'Main',
         'year': datetime.now().year
     }
@@ -33,8 +34,24 @@ def contact():
 def about():
     """Renders the about page."""
     return {
-        'title': 'About',
-        'message': 'Your application description page.',
+        'title': 'О нас',
+        'message': 'Все что вы хотите знать о CoolBookShop',
+        'year': datetime.now().year,
+    }
+
+@route('/book')
+@view('book')
+def about():
+    """Renders the book page."""
+    return {
+        'author': store.Book.authors,
+        'name': store.Book.name,
+        'code': store.Book.code,
+        'description': store.Book.description,
+        'price': store.Book.price,
+        'rating': store.Book.rating,
+        'bookyear': store.Book.year,
+        'isbn': store.Book.isbn,
         'year': datetime.now().year,
     }
 
