@@ -41,3 +41,12 @@ def profile():
         title='Profile',
         year=datetime.now().year
     )
+
+@route('/registration')
+@view('registration')
+def profile():
+    """Renders the contact page."""
+    return dict(
+        title='Registration',
+        year=datetime.now().year
+    )
