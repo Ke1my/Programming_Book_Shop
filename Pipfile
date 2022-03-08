@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 bottle = "*"
+pyserde = "*"
+toml = "*"
 
 [dev-packages]
 

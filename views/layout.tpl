@@ -27,9 +27,10 @@
                             
                         </ul>
                     </li>
-                    <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
                     <li class="nav-item"><a href="/profile" class="nav-link">Профиль</a></li>
                     <li class="nav-item"><a href="/registration" class="nav-link">Регистрация</a></li>
+                    <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
+
                 </ul>
             </div>
         </div>
