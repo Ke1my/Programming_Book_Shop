@@ -31,4 +31,13 @@ def about():
         'title': 'О нас',
         'year': datetime.now().year,
     }
+    
+
+@route('/profile')
+@view('profile')
+def profile():
+    """Renders the contact page."""
+    return dict(
+        title='Profile',
+        year=datetime.now().year
     )

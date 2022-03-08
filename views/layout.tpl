@@ -24,9 +24,11 @@
                             <li><a href="/catalog" class="dropdown-item">Все книги</a></li>
                             <li><a href="/catalog/popular" class="dropdown-item">По популярности</a></li>
                             <li><a href="/catalog/rating" class="dropdown-item">По рейтингу</a></li>
+                            
                         </ul>
                     </li>
                     <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
+                    <li class="nav-item"><a href="/about" class="nav-link">Профиль</a></li>
                 </ul>
             </div>
         </div>
