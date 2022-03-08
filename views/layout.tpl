@@ -17,16 +17,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a href="/home" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="/home" class="nav-link">Главная</a></li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Books</a>
+                        <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Каталог</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a href="/books/1" class="dropdown-item">Book 1</a></li>
-                            <li><a href="/books/2" class="dropdown-item">Book 2</a></li>
-                            <li><a href="/books/3" class="dropdown-item">Book 3</a></li>
+                            <li><a href="/catalog" class="dropdown-item">Все книги</a></li>
+                            <li><a href="/catalog/popular" class="dropdown-item">По популярности</a></li>
+                            <li><a href="/catalog/rating" class="dropdown-item">По рейтингу</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
                 </ul>
             </div>
         </div>
