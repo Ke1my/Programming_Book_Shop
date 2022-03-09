@@ -44,9 +44,9 @@ $ pipenv run python app.py
 
 ## Authors 💪
 
-- [@Ke1my](https://github.com/Ke1my)
-- [@Very1Fake](https://www.github.com/Very1Fake)
-- [@NormalPaporotnichek](https://github.com/NormalPaporotnichek)
+- Nikita Kelmiashkin ([@Ke1my](https://github.com/Ke1my))
+- Timur Israpilov ([@Very1Fake](https://www.github.com/Very1Fake))
+- Andrei Magazenkov ([@NormalPaporotnichek](https://github.com/NormalPaporotnichek))
 
 ## License :copyright:
 

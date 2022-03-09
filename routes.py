@@ -13,7 +13,7 @@ store = store.Store()
 @route('/home')
 @view('index')
 def home():
-    """Home page"""
+    """Главная страница"""
     return {
         'title': 'Main',
         'year': datetime.now().year
@@ -76,7 +76,7 @@ def profile():
 def catalog(filter: str = 'all'):
     """Filtered catalog page"""
 
-    if filter in ('all', 'popular', 'rating'):
+    if filter in ('all', 'popular', 'rating'): # Проверка выбранного фильтра
         return {
             'title': 'Каталог',
             'filter': filter,

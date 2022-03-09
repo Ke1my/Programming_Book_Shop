@@ -1,14 +1,15 @@
 % rebase('layout.tpl', title='Home Page', year=year)
 
+<!-- Заголовок с названием магазина -->
 <div class="p-5 my-4 bg-light rounded-3">
     <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">CoolBookShop</h1>
         <hr class="my-4">
         <p class="lead">Книжный онлайн-магазин по программированию</p>
-        <!-- <p><a href="http://bottlepy.org/docs/dev/index.html" class="btn btn-primary btn-large">Learn more &raquo;</a></p> -->
     </div>
 </div>
 
+<!-- Сетка для колонок с информацией о магазине -->
 <div class="row">
     <div class="col-md-4 mb-4">
         <h2>Лучшие книги</h2>
