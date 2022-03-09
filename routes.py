@@ -14,8 +14,7 @@ store = store.Store()
 @view('index')
 def home():
     """Home page"""
-    return 
-    {
+    return {
         'title': 'Main',
         'year': datetime.now().year
     }
@@ -40,20 +39,20 @@ def about():
     }
 
 @route('/book')
+@route('/book/<code>')
 @view('book')
-def about():
+def about(code: int = -1):
     """Renders the book page."""
-    return {
-        'author': store.Book.authors,
-        'name': store.Book.name,
-        'code': store.Book.code,
-        'description': store.Book.description,
-        'price': store.Book.price,
-        'rating': store.Book.rating,
-        'bookyear': store.Book.year,
-        'isbn': store.Book.isbn,
-        'year': datetime.now().year,
-    }
+    book = store.get_book(code)
+
+    if book is None:
+        abort(404)
+    else:
+        return {
+            'title': 'Book',
+            'book': book,
+            'year': datetime.now().year,
+        }
 
 @route('/profile')
 @view('profile')

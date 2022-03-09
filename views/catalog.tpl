@@ -14,7 +14,7 @@
     %for book in books.values():
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card">
-                <img src="/static/img/{{ book.code }}.jpeg" alt="{{ book.code }}.jpg" class="card-top-img">
+                <img src="/static/images/{{ book.code }}.jpg" alt="{{ book.code }}.jpg" class="card-top-img">
                 <div class="card-body">
                     <h5 class="card-title">{{ book.name }}</h5>
                 </div>
@@ -27,7 +27,7 @@
                     <li class="list-group-item">Цена: {{ book.price }}p.</li>
                 </ul>
                 <div class="card-body">
-                    <a href="/book" class="btn btn-primary" role="button">Купить</a>
+                    <a href="/book/{{ book.code }}" class="btn btn-primary" role="button">Купить</a>
                 </div>
             </div>
         </div>

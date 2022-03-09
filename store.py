@@ -30,8 +30,8 @@ class Store:
         for i in from_toml(Books, open('books.toml').read()).books:
             self.inner[i.code] = i
 
-    def get_book(self, id: int):
-        self.inner.get(id, id)
+    def get_book(self, id: int) -> Book | None:
+        return self.inner.get(int(id))
 
 
 @serde
