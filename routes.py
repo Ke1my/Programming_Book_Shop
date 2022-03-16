@@ -54,6 +54,8 @@ def about(code: int = -1):
             'year': datetime.now().year,
         }
 
+
+# Обозначение аргументов
 @route('/profile')
 @view('profile')
 def profile():
@@ -64,7 +66,7 @@ def profile():
 
 @route('/registration')
 @view('registration')
-def profile():
+def registration():
     return {
         'title': 'Registration',
         'year': datetime.now().year,
