@@ -9,6 +9,7 @@ import store
 
 store = store.Store()
 
+
 @route('/')
 @route('/home')
 @view('index')
@@ -19,6 +20,7 @@ def home():
         'year': datetime.now().year
     }
 
+
 @route('/contact')
 @view('contact')
 def contact():
@@ -27,6 +29,7 @@ def contact():
         'title': 'Contact',
         'year': datetime.now().year,
     }
+
 
 @route('/about')
 @view('about')
@@ -37,6 +40,7 @@ def about():
         'message': 'Все что вы хотите знать о CoolBookShop',
         'year': datetime.now().year,
     }
+
 
 @route('/book')
 @route('/book/<code>')
@@ -64,6 +68,7 @@ def profile():
         'year': datetime.now().year,
     }
 
+
 @route('/registration')
 @view('registration')
 def registration():
@@ -72,13 +77,14 @@ def registration():
         'year': datetime.now().year,
     }
 
+
 @route('/catalog')
 @route('/catalog/<filter>')
 @view('catalog')
 def catalog(filter: str = 'all'):
     """Filtered catalog page"""
 
-    if filter in ('all', 'popular', 'rating'): # Проверка выбранного фильтра
+    if filter in ('all', 'popular', 'rating'):  # Проверка выбранного фильтра
         return {
             'title': 'Каталог',
             'filter': filter,
@@ -87,4 +93,3 @@ def catalog(filter: str = 'all'):
         }
     else:
         abort(404)
-

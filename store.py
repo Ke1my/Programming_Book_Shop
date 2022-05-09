@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from serde import serde
 from serde.toml import from_toml
 
+
 @serde
 @dataclass
 class Book:
@@ -19,6 +20,7 @@ class Book:
     pages: int
     isbn: str
 
+
 class Store:
     # Класс - хранилище с книгами
     inner: dict[int, Book]
@@ -32,6 +34,7 @@ class Store:
 
     def get_book(self, id: int) -> Book | None:
         return self.inner.get(int(id))
+
 
 @serde
 class Books:
