@@ -1,19 +1,27 @@
 % rebase('layout.tpl', title=title, year=year)
 
 
-<div class="row">
-       <div class="col"></div>
-       <div class="col-2">
-             <!-- Заголовок -->
-              <h2 class="my-4">Регистрация</h2>
-              <!-- Поля для ввода -->
-              <p>Ник:</p>
-              <input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10">
-              <p>Пароль:</p>
-              <input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10">
-              <p>Повторите ваш пароль:</p>
-              <input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10">
-              <button type="button" class="btn btn-primary mt-4">Создать</button>
-       </div>
-       <div class="col"></div>
+<div class="column">
+    <div class="col-2">
+        <h2 class="my-4">Авторизация</h2>
+        <p>Почта:</p>
+        <input type="email" name="autmail">
+        <p>Пароль:</p>
+        <input type="password" name="autpass">
+        <button type="button" class="btn btn-primary mt-4">Авторизироваться</button>
+    </div>
+    <div class="col-2">
+        <form action="/reg" method="reg">
+           <h2 class="my-4">Регистрация</h2>
+           <p>Имя:</p>
+           <input type="text" name="regname" required minlength="4" maxlength="20" size="20">
+           <p>Почта:</p>
+           <input type="email" name="regmail">
+           <p>Пароль:</p>
+           <input type="password" name="regpass">
+           <p>Проверка пароля:</p>
+           <input type="password" name="regpasscheck">
+           <button type="button" onclick="" class="btn btn-primary mt-4">Зарегистрироваться</button>
+        </form>
+    </div>
 </div>

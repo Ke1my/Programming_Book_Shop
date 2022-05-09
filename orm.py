@@ -1,11 +1,11 @@
 from sqlalchemy import Column, ForeignKey, INTEGER, TEXT, REAL, BLOB, create_engine, event, UniqueConstraint, Table, select
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import declarative_base, relationship
-
+#import orm
 # TODO: Add proper __repr__ for all classes
 
 Base = declarative_base()
-
+#Engine = orm.open_db()
 
 association_author_book_table = Table("AuthorBook", Base.metadata,
                                       Column("author", ForeignKey(
@@ -143,3 +143,13 @@ def open_db(uri: str = "sqlite:///CoolBookDatabase.db") -> Engine:
 
 def query_latest_books(limit: int):
     return select(Book).order_by(Book.id.desc()).limit(limit)
+def book_select(id: int):
+    return select(Book).where(Book.id == id)
+def User_Select(id: int):
+    return select(User).where(User.id == id)
+def autorisation(login: str, password: str):
+    return select(User.id).where((User.login == login) and (User.password == sha(password)))
+def registration(login: str, email: str, password: str):
+    insert(User).values(login = login,email = email, password = password)
+def review_add(user_id: int, book_id: int, mark: int, content: str):
+    insert(Review).values(user_id = user_id,book_id = book_id, mark = mark, content = content)

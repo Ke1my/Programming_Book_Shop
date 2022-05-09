@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\views"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\orm.py",
   "PreviewInSolutionExplorer": false
 }
