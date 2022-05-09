@@ -4,10 +4,13 @@ Routes and views for the bottle application.
 
 from bottle import route, view, abort
 from datetime import datetime
+from sqlalchemy.orm import Session
 
 import store
+import orm
 
 store = store.Store()
+db = orm.open_db()
 
 
 @route('/')
@@ -84,12 +87,15 @@ def registration():
 def catalog(filter: str = 'all'):
     """Filtered catalog page"""
 
+    # TODO: Add authors
+    # TODO: Add book photo
     if filter in ('all', 'popular', 'rating'):  # Проверка выбранного фильтра
-        return {
-            'title': 'Каталог',
-            'filter': filter,
-            'books': store.inner,
-            'year': datetime.now().year,
-        }
+        with Session(db) as session:
+            return {
+                'title': 'Каталог',
+                'filter': filter,
+                'books': session.execute(orm.query_latest_books(20)).scalars().all(),
+                'year': datetime.now().year,
+            }
     else:
         abort(404)
