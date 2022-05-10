@@ -1,5 +1,6 @@
 from argon2 import PasswordHasher
-from sqlalchemy import Column, ForeignKey, INTEGER, TEXT, REAL, BLOB, create_engine, event, UniqueConstraint, Table, select, insert
+from sqlalchemy import Column, ForeignKey, INTEGER, TEXT, REAL, BLOB, create_engine, event, \
+    UniqueConstraint, Table, select, insert, update
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import declarative_base, relationship, selectinload
 

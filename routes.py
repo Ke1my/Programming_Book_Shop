@@ -48,14 +48,18 @@ def about():
 @route('/book')
 @route('/book/<code>')
 @view('book')
-def about(code: int = -1):
+def book(code: int = -1):
     """Renders the book page."""
     with Session(db) as session:
-        book = session.execute(orm.query_select_book(code)).scalar_one()
+        book = session.execute(orm.query_select_book(code)).scalar()
 
         if book is None:
             abort(404)
         else:
+            book.views += 1
+            session.commit()
+            session.refresh(book)
+
             return {
                 'title': 'Book',
                 'book': book,
@@ -64,7 +68,7 @@ def about(code: int = -1):
 
 
 @route('/book/image/<code:int>.jpg')
-def about(code: int = -1):
+def book_image(code: int = -1):
     """Returns book image from cache"""
 
     bytes = None
@@ -99,7 +103,7 @@ def profile():
 
 @route('/auth')
 @view('auth')
-def registration():
+def auth():
     return {
         'title': 'Authorization',
         'year': datetime.now().year,
