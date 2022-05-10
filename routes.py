@@ -6,10 +6,8 @@ from bottle import route, view, abort
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-import store
 import orm
 
-store = store.Store()
 db = orm.open_db()
 
 
@@ -50,16 +48,17 @@ def about():
 @view('book')
 def about(code: int = -1):
     """Renders the book page."""
-    book = store.get_book(code)
+    with Session(db) as session:
+        book = session.execute(orm.query_select_book(code)).scalar_one()
 
-    if book is None:
-        abort(404)
-    else:
-        return {
-            'title': 'Book',
-            'book': book,
-            'year': datetime.now().year,
-        }
+        if book is None:
+            abort(404)
+        else:
+            return {
+                'title': 'Book',
+                'book': book,
+                'year': datetime.now().year,
+            }
 
 
 # Обозначение аргументов

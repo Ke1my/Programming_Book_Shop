@@ -1,7 +1,7 @@
 from argon2 import PasswordHasher
 from sqlalchemy import Column, ForeignKey, INTEGER, TEXT, REAL, BLOB, create_engine, event, UniqueConstraint, Table, select, insert
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import declarative_base, relationship, selectinload
 
 # TODO: Add proper __repr__ for all classes
 
@@ -29,6 +29,9 @@ class Author(Base):
     books_rel = relationship("Book", secondary=association_author_book_table,
                              back_populates="authors_rel")
 
+    def __repr__(self):
+        return f"Author(id={self.id!r}, name={self.name!r})"
+
 
 class Publisher(Base):
     __tablename__ = "Publisher"
@@ -54,6 +57,7 @@ class Book(Base):
     isbn = Column(TEXT, unique=True)
     publisher = Column(INTEGER, ForeignKey("Publisher.id"), nullable=False)
     photo = Column(BLOB)
+    rating = Column(REAL)
 
     # Relations
     authors_rel = relationship("Author", secondary=association_author_book_table,
@@ -64,6 +68,9 @@ class Book(Base):
         "Review", back_populates="book_rel", uselist=False)
     popularity_rel = relationship(
         "Popularity", back_populates="book_rel", uselist=False)
+
+    def __repr__(self):
+        return f"Book(id={self.id!r}, name={self.name!r}, price={self.price!r})"
 
 
 class User(Base):
@@ -145,11 +152,18 @@ def open_db(uri: str = "sqlite:///CoolBookDatabase.db") -> Engine:
 
 
 def query_latest_books(limit: int):
-    return select(Book).order_by(Book.id.desc()).limit(limit)
+    return select(Book)\
+        .order_by(Book.id.desc())\
+        .limit(limit)\
+        .execution_options(populate_existing=True)\
+        .options(selectinload(Book.authors_rel))
 
 
 def query_select_book(id: int):
-    return select(Book).where(Book.id == id)
+    return select(Book)\
+        .where(Book.id == id)\
+        .execution_options(populate_existing=True)\
+        .options(selectinload(Book.authors_rel))
 
 
 def query_select_user(id: int):

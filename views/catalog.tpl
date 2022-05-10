@@ -25,8 +25,9 @@
                 <!-- Авторы книги -->
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        Authors here
-                        
+                        %for author in book.authors_rel:
+                            <p class="m-0">{{ author.name }}</p>
+                        %end
                     </li>
                     <li class="list-group-item">Цена: {{ book.price }}p.</li>
                 </ul>
