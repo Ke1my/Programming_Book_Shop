@@ -8,6 +8,7 @@ bottle = "*"
 pyserde = "*"
 toml = "*"
 sqlalchemy = "*"
+argon2-cffi = "*"
 
 [dev-packages]
 
