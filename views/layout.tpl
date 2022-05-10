@@ -21,7 +21,8 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Каталог</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a href="/catalog" class="dropdown-item">По новизне</a></li>
+                            <li><a href="/catalog/recent" class="dropdown-item">Все книги</a></li>
+                            <li><a href="/catalog/new" class="dropdown-item">Новинки</a></li>
                             <li><a href="/catalog/popular" class="dropdown-item">По популярности</a></li>
                             <li><a href="/catalog/rating" class="dropdown-item">По рейтингу</a></li>
                             

@@ -83,18 +83,27 @@ def registration():
 @route('/catalog')
 @route('/catalog/<filter>')
 @view('catalog')
-def catalog(filter: str = 'all'):
+def catalog(filter: str = 'recent'):
     """Filtered catalog page"""
 
-    # TODO: Add authors
-    # TODO: Add book photo
-    if filter in ('all', 'popular', 'rating'):  # Проверка выбранного фильтра
-        with Session(db) as session:
-            return {
-                'title': 'Каталог',
-                'filter': filter,
-                'books': session.execute(orm.query_latest_books(20)).scalars().all(),
-                'year': datetime.now().year,
-            }
-    else:
-        abort(404)
+    books = []
+
+    with Session(db) as session:
+        # TODO: Add book photo
+        if filter == 'recent':  # Проверка выбранного фильтра
+            books = session.execute(orm.query_latest_books(20)).scalars().all()
+        elif filter == 'new':  # Проверка выбранного фильтра
+            books = session.execute(orm.query_latest_books_new(20)).scalars().all()
+        elif filter == 'popular':
+            books = session.execute(orm.query_latest_books_views(20)).scalars().all()
+        elif filter == 'rating':
+            books = session.execute(orm.query_latest_books_rating(20)).scalars().all()
+        else:
+            abort(404)
+
+    return {
+        'title': 'Каталог',
+        'filter': filter,
+        'books': books,
+        'year': datetime.now().year,
+    }

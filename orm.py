@@ -58,6 +58,7 @@ class Book(Base):
     publisher = Column(INTEGER, ForeignKey("Publisher.id"), nullable=False)
     photo = Column(BLOB)
     rating = Column(REAL)
+    views = Column(INTEGER)
 
     # Relations
     authors_rel = relationship("Author", secondary=association_author_book_table,
@@ -66,8 +67,6 @@ class Book(Base):
     cart_rel = relationship("Cart", back_populates="book_rel")
     reviews_rel = relationship(
         "Review", back_populates="book_rel", uselist=False)
-    popularity_rel = relationship(
-        "Popularity", back_populates="book_rel", uselist=False)
 
     def __repr__(self):
         return f"Book(id={self.id!r}, name={self.name!r}, price={self.price!r})"
@@ -120,17 +119,6 @@ class Review(Base):
     book_rel = relationship("Book", back_populates="reviews_rel")
 
 
-class Popularity(Base):
-    __tablename__ = "Popularity"
-
-    # Fields
-    book = Column(INTEGER, ForeignKey("Book.id"), primary_key=True)
-    views = Column(INTEGER, nullable=False, default=0)
-
-    # Relations
-    book_rel = relationship("Book", back_populates="popularity_rel")
-
-
 # Engine definitions
 
 
@@ -151,12 +139,28 @@ def open_db(uri: str = "sqlite:///CoolBookDatabase.db") -> Engine:
 # Queries
 
 
-def query_latest_books(limit: int):
+def __query_latest_books(limit: int, ordering):
     return select(Book)\
-        .order_by(Book.id.desc())\
+        .order_by(ordering)\
         .limit(limit)\
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
+
+
+def query_latest_books(limit: int):
+    return __query_latest_books(limit, Book.id.desc())
+
+
+def query_latest_books_new(limit: int):
+    return __query_latest_books(limit, Book.year.desc())
+
+
+def query_latest_books_rating(limit: int):
+    return __query_latest_books(limit, Book.rating.desc())
+
+
+def query_latest_books_views(limit: int):
+    return __query_latest_books(limit, Book.views.desc())
 
 
 def query_select_book(id: int):

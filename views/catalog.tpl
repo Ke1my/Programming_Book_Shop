@@ -3,6 +3,9 @@
 <!-- Заголовок каталога. Вставка применённого стиля -->
 <h1 class="my-5">
     Каталог\\
+    %if filter == 'new':
+         - Новинки\\
+    %end
     %if filter == 'popular':
          - По популярности\\
     %end
@@ -19,6 +22,9 @@
             <div class="card">
                 <!-- Фото обложки -->
                 <img src="/static/images/{{ book.id }}.jpg" alt="{{ book.id }}.jpg" class="card-top-img">
+                <div style="position: relative;">
+                    <div class="rating-container"><span class="rating">{{ book.rating }}</span></div>
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ book.name }}</h5>
                 </div>
