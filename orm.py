@@ -79,8 +79,8 @@ class User(Base):
     # Fields
     id = Column(INTEGER, primary_key=True)
     email = Column(TEXT, unique=True, nullable=False)
-    login = Column(TEXT, unique=True, nullable=False)
-    password = Column(BLOB, nullable=False)
+    name = Column(TEXT, nullable=False)
+    password = Column(TEXT, nullable=False)
 
     # Relations
     cart_rel = relationship("Cart", back_populates="user_rel")
@@ -139,14 +139,12 @@ def open_db(uri: str = "sqlite:///CoolBookDatabase.db") -> Engine:
 
 # Queries
 
-
 def __query_latest_books(limit: int, ordering):
     return select(Book)\
         .order_by(ordering)\
         .limit(limit)\
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
-
 
 def query_latest_books(limit: int):
     return __query_latest_books(limit, Book.id.desc())
@@ -155,7 +153,6 @@ def query_latest_books(limit: int):
 def query_latest_books_new(limit: int):
     return __query_latest_books(limit, Book.year.desc())
 
-
 def query_latest_books_rating(limit: int):
     return __query_latest_books(limit, Book.rating.desc())
 
@@ -163,26 +160,20 @@ def query_latest_books_rating(limit: int):
 def query_latest_books_views(limit: int):
     return __query_latest_books(limit, Book.views.desc())
 
-
 def query_select_book(id: int):
     return select(Book)\
         .where(Book.id == id)\
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
 
-
 def query_select_user(id: int):
     return select(User).where(User.id == id)
-
 
 def query_authorization(login: str, password: str):
     return select(User.id).where((User.login == login) and (User.password == Hasher.hash(password)))
 
+def query_select_user_by_password(password: str):
+    return select(User).where(User.password == password)
 
-def query_registration(login: str, email: str, password: str):
-    insert(User).values(login=login, email=email, password=password)
-
-
-def query_insert_review(user_id: int, book_id: int, mark: int, content: str):
-    insert(Review).values(user_id=user_id,
-                          book_id=book_id, mark=mark, content=content)
+def query_select_user_by_email(email: str):
+    return select(User).where(User.email == email)
