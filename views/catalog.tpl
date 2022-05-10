@@ -21,7 +21,7 @@
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card">
                 <!-- Фото обложки -->
-                <img src="/static/images/{{ book.id }}.jpg" alt="{{ book.id }}.jpg" class="card-top-img">
+                <img src="/book/image/{{ book.id }}.jpg" alt="{{ book.id }}.jpg" class="card-top-img">
                 <div style="position: relative;">
                     <div class="rating-container"><span class="rating">{{ book.rating }}</span></div>
                 </div>

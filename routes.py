@@ -2,12 +2,14 @@
 Routes and views for the bottle application.
 """
 
-from bottle import route, view, abort
+from collections import deque
+from bottle import route, view, abort, response
 from datetime import datetime
 from sqlalchemy.orm import Session
 
 import orm
 
+book_image_cache = deque(maxlen=30)
 db = orm.open_db()
 
 
@@ -61,6 +63,30 @@ def about(code: int = -1):
             }
 
 
+@route('/book/image/<code:int>.jpg')
+def about(code: int = -1):
+    """Returns book image from cache"""
+
+    bytes = None
+
+    for (id, photo) in book_image_cache:
+        if id == code:
+            bytes = photo
+    
+    if bytes is None:
+        with Session(db) as session:
+            book = session.execute(orm.query_select_book(code)).scalar()
+
+            if book is None:
+                abort(404)
+            else:
+                bytes = book.photo
+                book_image_cache.append((book.id, bytes))
+
+    response.set_header("Content-Type", "image/jpeg")
+    return bytes
+
+
 # Обозначение аргументов
 @route('/profile')
 @view('profile')
@@ -93,11 +119,14 @@ def catalog(filter: str = 'recent'):
         if filter == 'recent':  # Проверка выбранного фильтра
             books = session.execute(orm.query_latest_books(20)).scalars().all()
         elif filter == 'new':  # Проверка выбранного фильтра
-            books = session.execute(orm.query_latest_books_new(20)).scalars().all()
+            books = session.execute(
+                orm.query_latest_books_new(20)).scalars().all()
         elif filter == 'popular':
-            books = session.execute(orm.query_latest_books_views(20)).scalars().all()
+            books = session.execute(
+                orm.query_latest_books_views(20)).scalars().all()
         elif filter == 'rating':
-            books = session.execute(orm.query_latest_books_rating(20)).scalars().all()
+            books = session.execute(
+                orm.query_latest_books_rating(20)).scalars().all()
         else:
             abort(404)
 

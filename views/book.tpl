@@ -5,7 +5,7 @@
 <div class="row"><!--Разделение странички на 2 секции, через класс row-->
     <div class="col-ld-3 col-md-3 col-mb-3"><!--Размер первого блока-->
         <div class="cl2">
-            <img src="/static/images/{{ book.id }}.jpg" width = 300px>
+            <img src="/book/image/{{ book.id }}.jpg" width = 300px>
         </div>
     </div>
     <div class="col-ld-9 col-md-9 col-mb-9"><!--Размер второго блока(с информацией о книгах)-->
