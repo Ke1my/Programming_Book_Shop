@@ -61,6 +61,7 @@ def book(code: int = -1):
             }
 
 
+
 @route('/book/image/<code:int>.jpg')
 def book_image(code: int = -1):
     """Returns book image from cache"""
@@ -83,7 +84,22 @@ def book_image(code: int = -1):
 
     response.set_header("Content-Type", "image/jpeg")
     return bytes
-
+@route('/catalog')
+@route('/catalog/<filter>')
+@view('catalog')
+def catalog(filter: str = 'recent'):
+    """Filtered catalog page"""
+    books = []
+    with Session(db) as session:
+        user = session.execute(orm.query_select_user_by_password(request.get_cookie('userhash',secret = COOKIE_SECRET))).scalar()
+        books = session.execute(orm.query_latest_books(20)).scalars().all()
+        return {
+        'title': 'Каталог',
+        'filter': filter,
+        'user': user,
+        'books': books,
+        'year': datetime.now().year,
+    }
 
 @route('/profile')
 @view('profile')
@@ -175,6 +191,16 @@ def review():
     content = request.forms.get('review text')
     user = request.forms.get('user')
     book = request.forms.get('book')
+    with Session(db) as session:
+        newreview = orm.Review(mark = mark,user = user,book = book,content = content)
+        session.add(newreview)
+        session.commit()
+        session.refresh(Review)
+    return redirect('/book')
+
+@post('/confirm', method = 'post')
+def review():
+    user = request.forms.get('user')
     with Session(db) as session:
         newreview = orm.Review(mark = mark,user = user,book = book,content = content)
         session.add(newreview)

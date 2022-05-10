@@ -158,7 +158,7 @@ def query_latest_books_rating(limit: int):
 
 
 def query_latest_books_views(limit: int):
-    return __query_latest_books(limit, Book.views.desc())
+    return __query_latest_books(limit, Book.views.desc())   
 
 def query_select_book(id: int):
     return select(Book)\
@@ -177,3 +177,5 @@ def query_select_user_by_password(password: str):
 
 def query_select_user_by_email(email: str):
     return select(User).where(User.email == email)
+def query_select_cart_books(user_id: int):
+    return select(Book).where(User.id in)

@@ -1,6 +1,4 @@
 % rebase('layout.tpl', title=title, year=year)
-<input type = "hidden" name ="book" value ="{{ book.id }}">
-<input type = "hidden" name ="user" value ="{{ user.id }}">
 <h2 class="my-4">{{ ', '.join(a.name for a in book.authors_rel) }}</h2>
 <h3 class="my-3">{{ book.name }}</h3>
 <div class="row"><!--Разделение странички на 2 секции, через класс row-->
@@ -24,9 +22,11 @@
     <h4 class="card-header text-center">Оставьте свой отзыв</h4>
     <div class="card-body">
         <form action="/review" method="post">
+            <input type = "hidden" name ="book" value ="{{ book.id }}">
+            <input type = "hidden" name ="user" value ="{{ user.id }}">
             <div class="mb-3">
-                <label for="review mark" class="form-label">Как вы оцениваете данную книгу</label>
-                <input type="" class="form-control" id="review mark" placeholder="Введите число от 1 до 10" name="review mark" required>
+            <label for="review mark" class="form-label">Как вы оцениваете данную книгу</label>
+            <input type="" class="form-control" id="review mark" placeholder="Введите число от 1 до 10" name="review mark" required>
             </div>
             <div class="input-group">
                 <span class="input-group-text">Ваш отзыв:</span>

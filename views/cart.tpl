@@ -1,19 +1,7 @@
 % rebase('layout.tpl', title=title, year=year)
 
 <!-- Заголовок каталога. Вставка применённого стиля -->
-<h1 class="my-5">
-    Каталог\\
-    %if filter == 'new':
-         - Новинки\\
-    %end
-    %if filter == 'popular':
-         - По популярности\\
-    %end
-    %if filter == 'rating':
-         - По рейтингу\\
-    %end
-</h1>
-
+<h2 class="my-4">Корзина</h2>
 <!-- Сетка -->
 <div class="row">
     %for book in books:
@@ -38,16 +26,11 @@
                     <li class="list-group-item">Цена: {{ book.price }}p.</li>
                 </ul>
                 <div class="card-body">
-                <form action="/review" method="post">
-                    <input type = "hidden" name ="book" value ="{{ book.id }}">
-                    <input type = "hidden" name ="user" value ="{{ user.id }}">
-                    <button type="submit" class="btn btn-primary">Добавить в корзину</button>
-                </form>
-                    <!-- Ссылка на страницу с книгой -->
-                    <a href="/book/{{ book.id }}" class="btn btn-primary" role="button">Открыть</a>
-
                 </div>
             </div>
         </div>
     %end
 </div>
+<form action="/confirm" method="post">
+<button type="submit" class="btn btn-primary">Оформить заказ</button>
+</form>
