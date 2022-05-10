@@ -21,17 +21,18 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Каталог</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a href="/catalog" class="dropdown-item">Все книги</a></li>
+                            <li><a href="/catalog" class="dropdown-item">По новизне</a></li>
                             <li><a href="/catalog/popular" class="dropdown-item">По популярности</a></li>
                             <li><a href="/catalog/rating" class="dropdown-item">По рейтингу</a></li>
                             
                         </ul>
                     </li>
                     <li class="nav-item"><a href="/profile" class="nav-link">Профиль</a></li>
-                    <li class="nav-item"><a href="/registration" class="nav-link">Регистрация</a></li>
                     <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
-
                 </ul>
+                <span class="navbar-text">
+                    <a href="/auth" class="nav-link">Вход</a>
+                </span>
             </div>
         </div>
     </div>

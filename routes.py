@@ -72,11 +72,11 @@ def profile():
     }
 
 
-@route('/registration')
-@view('registration')
+@route('/auth')
+@view('auth')
 def registration():
     return {
-        'title': 'Registration',
+        'title': 'Authorization',
         'year': datetime.now().year,
     }
 
