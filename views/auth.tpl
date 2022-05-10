@@ -7,7 +7,7 @@
         <div class="card my-5">
             <h4 class="card-header text-center">Авторизация</h4>
             <div class="card-body">
-                <form action="#" method="post">
+                <form action="/auth" method="post">
                     <div class="mb-3">
                         <label for="auth_email" class="form-label">Электронная почта</label>
                         <input type="email" class="form-control" id="auth_email" placeholder="example@mail.com" name="email" required>
@@ -27,7 +27,7 @@
         <div class="card my-5">
             <h4 class="card-header text-center">Регистрация</h4>
             <div class="card-body">
-                <form action="#" method="post">
+                <form action="/reg" method="post">
                     <div class="mb-3">
                         <label for="reg_name" class="form-label">Ваше имя</label>
                         <input type="text" class="form-control" id="reg_name" placeholder="Иван" name="name" required>

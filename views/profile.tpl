@@ -3,13 +3,9 @@
 <!-- Создание классов со свойствами и задание свойств-->
 <!-- Заголовки -->
 <h2>Профиль</h2>
-<h3>Андрей Лебедев</h3>
-
-<!-- Аватарка -->
-<div class="cl2">
-    <img src="static\images\ava.jpg" width = 300px>
-</div>
+<h3>{{user.name}}</h3>
+<h3>{{user.email}}</h3>
 <!-- Кнопки -->
 <div class="cl1">
-    <button type="button" class="btn btn-primary">Список желаний</button>
+    <button type="button" class="btn btn-primary">Корзина</button>
 </div>
