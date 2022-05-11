@@ -17,22 +17,24 @@
             <button type="button" class="btn btn-primary">Купить за {{ book.price }}</button>
         </div>
     </div>
-</div>
-<div class="card my-5">
-    <h4 class="card-header text-center">Оставьте свой отзыв</h4>
-    <div class="card-body">
-        <form action="/review" method="post">
-            <input type = "hidden" name ="book" value ="{{ book.id }}">
-            <input type = "hidden" name ="user" value ="{{ user.id }}">
-            <div class="mb-3">
-            <label for="review mark" class="form-label">Как вы оцениваете данную книгу</label>
-            <input type="" class="form-control" id="review mark" placeholder="Введите число от 1 до 10" name="review mark" required>
+    <div class="col col-mb-0"></div>
+    <div class="col-9 col-mb-12">
+        <div class="card my-5">
+            <h4 class="card-header text-center">Оставьте свой отзыв</h4>
+            <div class="card-body">
+                <form action="/review" method="post">
+                    <input type="hidden" name="book" value="{{ book.id }}">
+                    <div class="mb-3">
+                        <label for="review-mark" class="form-label">Как вы оцениваете данную книгу</label>
+                        <input type="number" class="form-control" id="review-mark" min="0" max="10" name="review-mark" style="min-width: 100%;" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="review-content">Ваш отзыв:</label>
+                        <textarea class="form-control" id="review-content" rows="5" name="review-content" style="min-width: 100%;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
             </div>
-            <div class="input-group">
-                <span class="input-group-text">Ваш отзыв:</span>
-                <textarea class="form-control" id="textarea" rows="5" name = "review text"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Оставить отзыв</button>
-        </form>
+        </div>
     </div>
 </div>

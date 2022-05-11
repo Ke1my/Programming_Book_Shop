@@ -54,3 +54,8 @@ input[type="checkbox"].input-validation-error {
     font-weight: bold;
     color: #fff;
 }
+
+.catalog-hidden-form {
+    display: contents;
+    width: fit-content;
+}

@@ -11,12 +11,13 @@ Base = declarative_base()
 Hasher = PasswordHasher()
 
 
-association_author_book_table = Table("AuthorBook", Base.metadata,
-                                      Column("author", ForeignKey(
-                                          "Author.id"), primary_key=True),
-                                      Column("book", ForeignKey(
-                                          "Book.id"), primary_key=True),
-                                      )
+# Relation between Author and Book via AuthorBook table
+association_author_book_table = Table("AuthorBook", Base.metadata, Column("author", ForeignKey(
+    "Author.id"), primary_key=True), Column("book", ForeignKey("Book.id"), primary_key=True))
+
+# Association between User and Book via Cart table
+association_cart_table = Table("Cart", Base.metadata, Column("user", ForeignKey(
+    "User.id"), primary_key=True), Column("book", ForeignKey("Book.id"), primary_key=True))
 
 
 class Author(Base):
@@ -65,7 +66,8 @@ class Book(Base):
     authors_rel = relationship("Author", secondary=association_author_book_table,
                                back_populates="books_rel")
     publisher_rel = relationship("Publisher", back_populates="books_rel")
-    cart_rel = relationship("Cart", back_populates="book_rel")
+    cart_rel = relationship(
+        "User", secondary=association_cart_table, back_populates="cart_rel")
     reviews_rel = relationship(
         "Review", back_populates="book_rel", uselist=False)
 
@@ -83,23 +85,9 @@ class User(Base):
     password = Column(TEXT, nullable=False)
 
     # Relations
-    cart_rel = relationship("Cart", back_populates="user_rel")
+    cart_rel = relationship(
+        "Book", secondary=association_cart_table, back_populates="cart_rel")
     reviews_rel = relationship("Review", back_populates="user_rel")
-
-
-class Cart(Base):
-    __tablename__ = "Cart"
-
-    # Fields
-    user = Column(INTEGER, ForeignKey("User.id"), primary_key=True)
-    book = Column(INTEGER, ForeignKey("Book.id"), primary_key=True)
-
-    # Contraint
-    uix_user_book = UniqueConstraint("user", "book", name="uix_user_book")
-
-    # Relations
-    user_rel = relationship("User", back_populates="cart_rel")
-    book_rel = relationship("Book", back_populates="cart_rel")
 
 
 class Review(Base):
@@ -146,6 +134,7 @@ def __query_latest_books(limit: int, ordering):
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
 
+
 def query_latest_books(limit: int):
     return __query_latest_books(limit, Book.id.desc())
 
@@ -153,12 +142,14 @@ def query_latest_books(limit: int):
 def query_latest_books_new(limit: int):
     return __query_latest_books(limit, Book.year.desc())
 
+
 def query_latest_books_rating(limit: int):
     return __query_latest_books(limit, Book.rating.desc())
 
 
 def query_latest_books_views(limit: int):
-    return __query_latest_books(limit, Book.views.desc())   
+    return __query_latest_books(limit, Book.views.desc())
+
 
 def query_select_book(id: int):
     return select(Book)\
@@ -166,16 +157,25 @@ def query_select_book(id: int):
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
 
+
 def query_select_user(id: int):
     return select(User).where(User.id == id)
+
 
 def query_authorization(login: str, password: str):
     return select(User.id).where((User.login == login) and (User.password == Hasher.hash(password)))
 
+
 def query_select_user_by_password(password: str):
     return select(User).where(User.password == password)
 
+
 def query_select_user_by_email(email: str):
     return select(User).where(User.email == email)
-def query_select_cart_books(user_id: int):
-    return select(Book).where(User.id in)
+
+
+def query_select_cart(user: int):
+    return select(User)\
+        .where(User.id == user)\
+        .execution_options(populate_existing=True)\
+        .options(selectinload(Book.cart_rel))

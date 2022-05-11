@@ -38,10 +38,9 @@
                     <li class="list-group-item">Цена: {{ book.price }}p.</li>
                 </ul>
                 <div class="card-body">
-                <form action="/review" method="post">
-                    <input type = "hidden" name ="book" value ="{{ book.id }}">
-                    <input type = "hidden" name ="user" value ="{{ user.id }}">
-                    <button type="submit" class="btn btn-primary">Добавить в корзину</button>
+                <form action="/review" method="post" class="catalog-hidden-form">
+                    <input type="hidden" name="book" value="{{ book.id }}">
+                    <button type="submit" class="btn btn-primary">Купить</button>
                 </form>
                     <!-- Ссылка на страницу с книгой -->
                     <a href="/book/{{ book.id }}" class="btn btn-primary" role="button">Открыть</a>
