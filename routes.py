@@ -23,7 +23,8 @@ def home():
     """Главная страница"""
     return {
         'title': 'Main',
-        'year': datetime.now().year
+        'year': datetime.now().year,
+        'request': request,
     }
 
 
@@ -35,6 +36,7 @@ def about():
         'title': 'О нас',
         'message': 'Все что вы хотите знать о CoolBookShop',
         'year': datetime.now().year,
+        'request': request,
     }
 
 
@@ -57,6 +59,7 @@ def book(code: int = -1):
                 'title': 'Book',
                 'book': book,
                 'year': datetime.now().year,
+                'request': request,
             }
 
 
@@ -93,11 +96,13 @@ def catalog(filter: str = 'recent'):
     with Session(db) as session:
         books = session.execute(orm.query_latest_books(20)).scalars().all()
         return {
-        'title': 'Каталог',
-        'filter': filter,
-        'books': books,
-        'year': datetime.now().year,
-    }
+            'title': 'Каталог',
+            'filter': filter,
+            'books': books,
+            'year': datetime.now().year,
+            'request': request,
+        }
+
 
 @route('/profile')
 @view('profile')
@@ -116,7 +121,9 @@ def profile():
             'title': 'Profile',
             'user': user,
             'year': datetime.now().year,
+            'request': request,
         }
+
 
 @route('/auth')
 @view('auth')
@@ -127,6 +134,7 @@ def auth():
         return {
             'title': 'Authorization',
             'year': datetime.now().year,
+            'request': request,
         }
 
 
@@ -157,14 +165,15 @@ def catalog(filter: str = 'recent'):
         'filter': filter,
         'books': books,
         'year': datetime.now().year,
+        'request': request,
     }
 
 
-@post('/reg', method='post')
+@route('/reg', method='post')
 def registration():
-    name = request.forms.get('name')
-    mail = request.forms.get('email')
-    password = request.forms.get('pass')
+    name = request.forms.getunicodeunicode('name')
+    mail = request.forms.getunicode('email')
+    password = request.forms.getunicode('pass')
     with Session(db) as session:
         user = orm.User(name=name, email=mail,
                         password=orm.Hasher.hash(password))
@@ -173,10 +182,10 @@ def registration():
     return redirect('/auth')
 
 
-@post('/auth', method='post')
+@route('/auth', method='post')
 def auth_post():
-    password = request.forms.get('pass')
-    email = request.forms.get('email')
+    password = request.forms.getunicode('pass')
+    email = request.forms.getunicode('email')
     with Session(db) as session:
         user = session.execute(orm.query_select_user_by_email(email)).scalar()
         if user is None:
@@ -191,23 +200,41 @@ def auth_post():
                 return "Error2222"
 
 
-@post('/review', method='post')
+@route('/review', method='post')
 def review():
-    mark = request.forms.get('review-mark')
-    content = request.forms.get('review-content')
-    user = request.forms.get('user')
-    book = request.forms.get('book')
+    password = request.get_cookie('userhash', secret=COOKIE_SECRET)
+
+    if password is None:
+        return redirect(request_uri)
+
     with Session(db) as session:
-        newreview = orm.Review(mark=mark, user=user,
+        user = session.execute(
+            orm.query_select_user_by_password(password)).scalar()
+
+        if user is None:
+            return redirect('/logout')
+
+    mark = request.forms.getunicode('review-mark')
+    content = request.forms.getunicode('review-content')
+    book = request.forms.getunicode('book')
+    with Session(db) as session:
+        newreview = orm.Review(mark=mark, user=user.id,
                                book=book, content=content)
         session.add(newreview)
         session.commit()
-    return redirect('/book')
+    return redirect(f'/book/{book}')
 
 
-@post('/confirm', method='post')
+@route('/confirm', method='post')
 def review():
-    user = request.forms.get('user')
+    user = request.forms.getunicode('user')
     with Session(db) as session:
         return abort(500)  # TODO
     return redirect('/book')
+
+
+@route('/logout')
+def logout():
+    if request.get_cookie("userhash") is not None:
+        response.delete_cookie("userhash")
+    return redirect("/auth")

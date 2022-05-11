@@ -32,7 +32,12 @@
                     <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
                 </ul>
                 <span class="navbar-text">
-                    <a href="/auth" class="nav-link">Вход</a>
+                    %if request.get_cookie('userhash') == None:
+                        <a href="/auth" class="nav-link">Вход</a>
+                    %end
+                    %if request.get_cookie('userhash') != None:
+                        <a href="/logout" class="nav-link">Выйти</a>
+                    %end
                 </span>
             </div>
         </div>

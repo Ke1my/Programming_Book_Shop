@@ -119,7 +119,7 @@ def sqlite_pragma(dbapi_connection, connection_record):
     cursor.close()
 
 
-def open_db(uri: str = "sqlite:///CoolBookDatabase.db") -> Engine:
+def open_db(uri: str = "sqlite:///CoolBookDatabase.db?charset=utf8") -> Engine:
     engine = create_engine(uri, echo=True, future=True)
     Base.metadata.create_all(engine)
     return engine
