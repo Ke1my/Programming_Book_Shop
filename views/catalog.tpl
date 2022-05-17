@@ -38,7 +38,7 @@
                     <li class="list-group-item">Цена: {{ book.price }}p.</li>
                 </ul>
                 <div class="card-body">
-                <form action="/review" method="post" class="catalog-hidden-form">
+                <form action="/add" method="post" class="catalog-hidden-form">
                     <input type="hidden" name="book" value="{{ book.id }}">
                     <button type="submit" class="btn btn-primary">Купить</button>
                 </form>

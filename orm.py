@@ -157,6 +157,11 @@ def query_select_book(id: int):
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
 
+def query_select_books_review(id:int):
+    return select(Review)\
+        .where(Review.book == id)\
+        .execution_options(populate_existing=True)\
+        .options(selectinload(Review.user_rel))
 
 def query_select_user(id: int):
     return select(User).where(User.id == id)

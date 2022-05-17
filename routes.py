@@ -7,7 +7,7 @@ from bottle import route, view, abort, response, post, request, redirect
 from datetime import datetime
 from sqlalchemy.orm import Session
 import argon2
-
+import utils
 import orm
 
 COOKIE_SECRET = 'RZIcY0t8FMsTuHEI6HDm1w$J01bVVqbsXDgAcRj7znMlCQ01Ak51OU21bR+/0qujXk'
@@ -46,22 +46,23 @@ def about():
 def book(code: int = -1):
     """Renders the book page."""
     with Session(db) as session:
+        reviews = []
+        with Session(db) as session:
+            reviews = session.execute(orm.query_latest_books(20)).scalars().all()
         book = session.execute(orm.query_select_book(code)).scalar()
-
         if book is None:
             abort(404)
         else:
             book.views += 1
             session.commit()
             session.refresh(book)
-
             return {
                 'title': 'Book',
                 'book': book,
+                'reviews': reviews,
                 'year': datetime.now().year,
                 'request': request,
             }
-
 
 @route('/book/image/<code:int>.jpg')
 def book_image(code: int = -1):
@@ -137,6 +138,20 @@ def auth():
             'request': request,
         }
 
+@route('/cart')
+@view('cart')
+def catalog():
+    """Filtered catalog page"""
+    books = []
+    with Session(db) as session:
+        books = session.execute(orm.query_select_cart(orm.query_select_user_by_password(request.get_cookie('userhash', secret=COOKIE_SECRET)).scalar()).scalars().all())
+    return {
+        'title': 'Каталог',
+        'filter': filter,
+        'books': books,
+        'year': datetime.now().year,
+        'request': request,
+    }
 
 @route('/catalog')
 @route('/catalog/<filter>')
@@ -175,8 +190,7 @@ def registration():
     mail = request.forms.getunicode('email')
     password = request.forms.getunicode('pass')
     with Session(db) as session:
-        user = orm.User(name=name, email=mail,
-                        password=orm.Hasher.hash(password))
+        user = orm.User(name=name, email=mail, password=orm.Hasher.hash(password))
         session.add(user)
         session.commit()
     return redirect('/auth')
@@ -203,14 +217,11 @@ def auth_post():
 @route('/review', method='post')
 def review():
     password = request.get_cookie('userhash', secret=COOKIE_SECRET)
-
     if password is None:
         return redirect(request_uri)
-
     with Session(db) as session:
         user = session.execute(
             orm.query_select_user_by_password(password)).scalar()
-
         if user is None:
             return redirect('/logout')
 
@@ -218,19 +229,28 @@ def review():
     content = request.forms.getunicode('review-content')
     book = request.forms.getunicode('book')
     with Session(db) as session:
-        newreview = orm.Review(mark=mark, user=user.id,
-                               book=book, content=content)
+        newreview = orm.Review(mark=mark, user=user.id, book=book, content=content)
         session.add(newreview)
         session.commit()
     return redirect(f'/book/{book}')
 
-
 @route('/confirm', method='post')
 def review():
     user = request.forms.getunicode('user')
+    # Try to check something
     with Session(db) as session:
-        return abort(500)  # TODO
-    return redirect('/book')
+        user = session.execute(orm.query_select_user_by_password(request.get_cookie('userhash', secret=COOKIE_SECRET))
+         # TODO DROP
+    return redirect('/card')
+
+@route('/add', method='post')
+def add():
+    code = request.forms.getunicode('book')
+    with Session(db) as session:
+        book = session.execute(orm.query_select_book(code)).scalar()
+        user = session.execute(orm.query_select_user_by_password(request.get_cookie('userhash', secret=COOKIE_SECRET))
+        user.card_rel.append(book)
+        session.commit()
 
 
 @route('/logout')

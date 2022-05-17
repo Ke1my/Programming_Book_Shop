@@ -14,7 +14,10 @@
             <p>Рейтинг: {{ book.rating }}</p>
             <h3>Описание</h3>
             <p>{{ book.description }}</p><!--Кнопки для взаимодействий-->
-            <button type="button" class="btn btn-primary">Купить за {{ book.price }}</button>
+            <form action="/add" method="post">
+                  <input type="hidden" name="book" value="{{ book.id }}">
+                <button type="submit" class="btn btn-primary">Купить за {{ book.price }}</button>
+            </form>
         </div>
     </div>
     <div class="col col-mb-0"></div>
@@ -36,5 +39,11 @@
                 </form>
             </div>
         </div>
+        %for review in rewviews:
+            <p>{{review.user_rel.name}}</p>
+            <p>{{ review.mark }}</p>
+            <p>{{ review.content }}</p>
+        %end
     </div>
 </div>
+
