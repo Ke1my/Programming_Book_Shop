@@ -221,7 +221,6 @@ def review():
         return redirect(request_uri)
     with Session(db) as session:
         user = session.execute(
-            if 
             orm.query_select_user_by_password(password)).scalar()
         if user is None:
             return redirect('/logout')
