@@ -32,5 +32,7 @@
     %end
 </div>
 <form action="/confirm" method="post">
+<input type="text" class="form-control" name="phone_number" style="min-width: 100%;" required>
+<input type="text" class="form-control" name="email_adress" style="min-width: 100%;" required>
 <button type="submit" class="btn btn-primary">Оформить заказ</button>
 </form>
