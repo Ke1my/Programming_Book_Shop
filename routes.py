@@ -50,7 +50,7 @@ def book(code: int = -1):
         reviews = []
         with Session(db) as session:
             reviews = session.execute(
-                orm.query_latest_books(20)).scalars().all()
+                orm.query_select_book_reviews(code)).scalars().all()
         book = session.execute(orm.query_select_book(code)).scalar()
         if book is None:
             abort(404)
@@ -235,8 +235,10 @@ def auth_post():
 @route('/review', method='post')
 def review():
     password = request.get_cookie('userhash', secret=COOKIE_SECRET)
+    book = request.forms.getunicode('book')
+
     if password is None:
-        return redirect(request_uri)
+        return redirect(f"/book/{book}")
     with Session(db) as session:
         user = session.execute(
             orm.query_select_user_by_password(password)).scalar()
@@ -245,7 +247,6 @@ def review():
 
     mark = request.forms.getunicode('review-mark')
     content = request.forms.getunicode('review-content')
-    book = request.forms.getunicode('book')
     with Session(db) as session:
         newreview = orm.Review(mark=mark, user=user.id,
                                book=book, content=content)

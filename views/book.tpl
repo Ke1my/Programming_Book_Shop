@@ -39,11 +39,19 @@
                 </form>
             </div>
         </div>
-        %for review in reviews:
-            <p>{{ review.user_rel.name }}</p>
-            <p>{{ review.mark }}</p>
-            <p>{{ review.content }}</p>
-        %end
+        <div class="row">
+            %for review in reviews:
+                <div class="col-12">
+                    <div class="card mb-4" style="min-width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ review.user_rel.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Оценка: {{ review.mark }}</h6>
+                            <p class="card-text">{{ review.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            %end
+        </div>
     </div>
 </div>
 
