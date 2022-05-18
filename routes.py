@@ -146,17 +146,17 @@ def auth():
 @view('cart')
 def catalog():
     """Filtered catalog page"""
-    books = []
     with Session(db) as session:
-        books = session.execute(orm.query_select_cart(orm.query_select_user_by_password(
-            request.get_cookie('userhash', secret=COOKIE_SECRET)).scalar()).scalars().all())
-    return {
-        'title': 'Каталог',
-        'filter': filter,
-        'books': books,
-        'year': datetime.now().year,
-        'request': request,
-    }
+        user = session.execute(orm.query_select_user_cart_by_password(
+            request.get_cookie('userhash', secret=COOKIE_SECRET))).scalar()
+        
+        return {
+            'title': 'Каталог',
+            'filter': filter,
+            'user': user,
+            'year': datetime.now().year,
+            'request': request,
+        }
 
 
 @route('/catalog')
@@ -261,9 +261,10 @@ def review():
     # Try to check something
     with Session(db) as session:
         user = session.execute(orm.query_select_user_by_password(
-            request.get_cookie('userhash', secret=COOKIE_SECRET)))
-        # TODO DROP
-    return redirect('/card')
+            request.get_cookie('userhash', secret=COOKIE_SECRET))).scalar()
+        user.cart_rel.clear()
+        session.commit()
+    return redirect('/profile')
 
 
 @route('/add', method='post')
@@ -271,10 +272,11 @@ def add():
     code = request.forms.getunicode('book')
     with Session(db) as session:
         book = session.execute(orm.query_select_book(code)).scalar()
-        user = session.execute(orm.query_select_user_by_password(
-            request.get_cookie('userhash', secret=COOKIE_SECRET)))
-        user.card_rel.append(book)
+        user = session.execute(orm.query_select_user_cart_by_password(
+            request.get_cookie('userhash', secret=COOKIE_SECRET))).scalar()
+        user.cart_rel.append(book)
         session.commit()
+    return redirect("/catalog")
 
 
 @route('/logout')
@@ -290,15 +292,17 @@ def active():
     from orm import User, Review, func
     from sqlalchemy import desc, text
 
-    with Session(db) as session:
+    with Session(db) as session:  # Открытие сессии в бд
         return {
             'title': 'ТОП-10 Активных пользователей',
+            # Запрос на получение 10 самых активный пользователей
             'users': session.execute(session.query(User, func.count(Review.id))
                                      .select_from(Review)
-                                     .join(User)
-                                     .group_by(User)
-                                     .order_by(desc(text("count_1")))
-                                     .limit(10)).fetchall(),
+                                     .join(User) # Join с таблицей пользователей
+                                     .group_by(User) # Группировка отзывов по пользователям
+                                     .order_by(desc(text("count_1"))) # Обратная сортировка
+                                     .limit(10) # Последние 10 записей
+                                     ).fetchall(),
             'year': datetime.now().year,
             'request': request,
         }

@@ -66,8 +66,8 @@ class Book(Base):
     authors_rel = relationship("Author", secondary=association_author_book_table,
                                back_populates="books_rel")
     publisher_rel = relationship("Publisher", back_populates="books_rel")
-    cart_users_rel = relationship(
-        "User", secondary=association_cart_table, back_populates="cart_books_rel")
+    cart_rel = relationship(
+        "User", secondary=association_cart_table, back_populates="cart_rel")
     reviews_rel = relationship(
         "Review", back_populates="book_rel", uselist=False)
 
@@ -85,8 +85,8 @@ class User(Base):
     password = Column(TEXT, nullable=False)
 
     # Relations
-    cart_books_rel = relationship(
-        "Book", secondary=association_cart_table, back_populates="cart_users_rel")
+    cart_rel = relationship(
+        "Book", secondary=association_cart_table, back_populates="cart_rel")
     reviews_rel = relationship("Review", back_populates="user_rel")
 
 
@@ -157,7 +157,8 @@ def query_select_book(id: int):
         .execution_options(populate_existing=True)\
         .options(selectinload(Book.authors_rel))
 
-def query_select_book_reviews(id:int):
+
+def query_select_book_reviews(id: int):
     return select(Review)\
         .where(Review.book == id)\
         .execution_options(populate_existing=True)\
@@ -165,8 +166,10 @@ def query_select_book_reviews(id:int):
         .order_by(Review.id.desc())\
         .limit(25)
 
+
 def query_select_user(id: int):
     return select(User).where(User.id == id)
+
 
 def query_authorization(login: str, password: str):
     return select(User.id).where((User.login == login) and (User.password == Hasher.hash(password)))
@@ -174,6 +177,12 @@ def query_authorization(login: str, password: str):
 
 def query_select_user_by_password(password: str):
     return select(User).where(User.password == password)
+
+
+def query_select_user_cart_by_password(password: str):
+    return select(User).where(User.password == password)\
+        .execution_options(populate_existing=True)\
+        .options(selectinload(User.cart_rel))
 
 
 def query_select_user_by_email(email: str):
