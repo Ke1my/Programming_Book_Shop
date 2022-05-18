@@ -7,5 +7,5 @@
 <h3>{{user.email}}</h3>
 <!-- Кнопки -->
 <div class="cl1">
-    <button type="button" class="btn btn-primary">Корзина</button>
+    <a href="/cart" class="btn btn-primary">Корзина</a>
 </div>

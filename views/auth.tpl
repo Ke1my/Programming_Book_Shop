@@ -40,7 +40,7 @@
                     <div class="mb-3">
                         <label for="reg_pass" class="form-label">Придумайте пароль</label>
                         <input type="password" class="form-control" id="reg_pass" name="pass" minlength="8" maxlength="32" required>
-                        <div id="reg_email_help" class="form-text">Пароль должен содержать минимум 8 символов.<br>Разрешённые символы: A-Z, a-z, 0-9, _, -</div>
+                        <div id="reg_email_help" class="form-text">Пароль должен содержать минимум 8 символов. И содержать хотя бы одну цифру, а также заглавную букву.<br>Разрешённые символы: A-Z, a-z, 0-9, _, -</div>
                     </div>
                     <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                 </form>

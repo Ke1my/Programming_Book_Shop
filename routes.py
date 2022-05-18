@@ -8,7 +8,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 import argon2
 
-from utils import check_email
+from utils import check_email, check_password_weakness
 import orm
 
 COOKIE_SECRET = 'RZIcY0t8FMsTuHEI6HDm1w$J01bVVqbsXDgAcRj7znMlCQ01Ak51OU21bR+/0qujXk'
@@ -198,6 +198,9 @@ def registration():
 
     if not check_email(email):
         return "Bad email"
+
+    if not check_password_weakness(password):
+        return "Weak password"
 
     with Session(db) as session:
         user = orm.User(name=name, email=email,

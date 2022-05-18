@@ -1,3 +1,4 @@
+from string import digits, ascii_uppercase, ascii_lowercase
 import re
 
 EMAIL_REGEX = re.compile(
@@ -6,6 +7,15 @@ EMAIL_REGEX = re.compile(
 
 def check_email(email: str) -> bool:
     return EMAIL_REGEX.match(email) is not None
+
+
+def check_password_weakness(password: str) -> bool:
+    if len(password) >= 8:
+        if any(num in password for num in digits):
+            if any(upper in password for upper in ascii_uppercase):
+                if any(lower in password for lower in ascii_lowercase):
+                    return True
+    return False
 
 
 def review_is_valid(mark, content):
