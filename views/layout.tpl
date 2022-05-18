@@ -25,10 +25,10 @@
                             <li><a href="/catalog/new" class="dropdown-item">Новинки</a></li>
                             <li><a href="/catalog/popular" class="dropdown-item">По популярности</a></li>
                             <li><a href="/catalog/rating" class="dropdown-item">По рейтингу</a></li>
-                            
                         </ul>
                     </li>
                     <li class="nav-item"><a href="/profile" class="nav-link">Профиль</a></li>
+                    <li class="nav-item"><a href="/active" class="nav-link">Активные пользователи</a></li>
                     <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
                 </ul>
                 <span class="navbar-text">

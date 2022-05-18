@@ -1,8 +1,8 @@
 from argon2 import PasswordHasher
 from sqlalchemy import Column, ForeignKey, INTEGER, TEXT, REAL, BLOB, create_engine, event, \
-    UniqueConstraint, Table, select, insert, update
+    UniqueConstraint, Table, select, func
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import declarative_base, relationship, selectinload
+from sqlalchemy.orm import declarative_base, relationship, selectinload, Query
 
 # TODO: Add proper __repr__ for all classes
 
@@ -66,8 +66,8 @@ class Book(Base):
     authors_rel = relationship("Author", secondary=association_author_book_table,
                                back_populates="books_rel")
     publisher_rel = relationship("Publisher", back_populates="books_rel")
-    cart_rel = relationship(
-        "User", secondary=association_cart_table, back_populates="cart_rel")
+    cart_users_rel = relationship(
+        "User", secondary=association_cart_table, back_populates="cart_books_rel")
     reviews_rel = relationship(
         "Review", back_populates="book_rel", uselist=False)
 
@@ -85,8 +85,8 @@ class User(Base):
     password = Column(TEXT, nullable=False)
 
     # Relations
-    cart_rel = relationship(
-        "Book", secondary=association_cart_table, back_populates="cart_rel")
+    cart_books_rel = relationship(
+        "Book", secondary=association_cart_table, back_populates="cart_users_rel")
     reviews_rel = relationship("Review", back_populates="user_rel")
 
 
@@ -166,7 +166,6 @@ def query_select_books_review(id:int):
 def query_select_user(id: int):
     return select(User).where(User.id == id)
 
-
 def query_authorization(login: str, password: str):
     return select(User.id).where((User.login == login) and (User.password == Hasher.hash(password)))
 
@@ -183,4 +182,4 @@ def query_select_cart(user: int):
     return select(User)\
         .where(User.id == user)\
         .execution_options(populate_existing=True)\
-        .options(selectinload(Book.cart_rel))
+        .options(selectinload(Book.cart_users_rel))

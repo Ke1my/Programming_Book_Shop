@@ -48,7 +48,8 @@ def book(code: int = -1):
     with Session(db) as session:
         reviews = []
         with Session(db) as session:
-            reviews = session.execute(orm.query_latest_books(20)).scalars().all()
+            reviews = session.execute(
+                orm.query_latest_books(20)).scalars().all()
         book = session.execute(orm.query_select_book(code)).scalar()
         if book is None:
             abort(404)
@@ -63,6 +64,7 @@ def book(code: int = -1):
                 'year': datetime.now().year,
                 'request': request,
             }
+
 
 @route('/book/image/<code:int>.jpg')
 def book_image(code: int = -1):
@@ -138,13 +140,15 @@ def auth():
             'request': request,
         }
 
+
 @route('/cart')
 @view('cart')
 def catalog():
     """Filtered catalog page"""
     books = []
     with Session(db) as session:
-        books = session.execute(orm.query_select_cart(orm.query_select_user_by_password(request.get_cookie('userhash', secret=COOKIE_SECRET)).scalar()).scalars().all())
+        books = session.execute(orm.query_select_cart(orm.query_select_user_by_password(
+            request.get_cookie('userhash', secret=COOKIE_SECRET)).scalar()).scalars().all())
     return {
         'title': 'Каталог',
         'filter': filter,
@@ -152,6 +156,7 @@ def catalog():
         'year': datetime.now().year,
         'request': request,
     }
+
 
 @route('/catalog')
 @route('/catalog/<filter>')
@@ -190,7 +195,8 @@ def registration():
     mail = request.forms.getunicode('email')
     password = request.forms.getunicode('pass')
     with Session(db) as session:
-        user = orm.User(name=name, email=mail, password=orm.Hasher.hash(password))
+        user = orm.User(name=name, email=mail,
+                        password=orm.Hasher.hash(password))
         session.add(user)
         session.commit()
     return redirect('/auth')
@@ -229,26 +235,31 @@ def review():
     content = request.forms.getunicode('review-content')
     book = request.forms.getunicode('book')
     with Session(db) as session:
-        newreview = orm.Review(mark=mark, user=user.id, book=book, content=content)
+        newreview = orm.Review(mark=mark, user=user.id,
+                               book=book, content=content)
         session.add(newreview)
         session.commit()
     return redirect(f'/book/{book}')
+
 
 @route('/confirm', method='post')
 def review():
     user = request.forms.getunicode('user')
     # Try to check something
     with Session(db) as session:
-        user = session.execute(orm.query_select_user_by_password(request.get_cookie('userhash', secret=COOKIE_SECRET))
-         # TODO DROP
+        user = session.execute(orm.query_select_user_by_password(
+            request.get_cookie('userhash', secret=COOKIE_SECRET)))
+        # TODO DROP
     return redirect('/card')
+
 
 @route('/add', method='post')
 def add():
     code = request.forms.getunicode('book')
     with Session(db) as session:
         book = session.execute(orm.query_select_book(code)).scalar()
-        user = session.execute(orm.query_select_user_by_password(request.get_cookie('userhash', secret=COOKIE_SECRET))
+        user = session.execute(orm.query_select_user_by_password(
+            request.get_cookie('userhash', secret=COOKIE_SECRET)))
         user.card_rel.append(book)
         session.commit()
 
@@ -258,3 +269,20 @@ def logout():
     if request.get_cookie("userhash") is not None:
         response.delete_cookie("userhash")
     return redirect("/auth")
+
+
+@route('/active')
+@view('active')
+def active():
+    from orm import User, Review, func
+
+    with Session(db) as session:
+        return {
+            'title': 'Активные пользователи',
+            'users': session.execute(session.query(User, func.count(Review.id))
+                                     .select_from(Review)
+                                     .join(User)
+                                     .group_by(User)).fetchall(),
+            'year': datetime.now().year,
+            'request': request,
+        }
