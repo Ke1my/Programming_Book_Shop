@@ -39,8 +39,8 @@
                 </form>
             </div>
         </div>
-        %for review in rewviews:
-            <p>{{review.user_rel.name}}</p>
+        %for review in reviews:
+            <p>{{ review.user_rel.name }}</p>
             <p>{{ review.mark }}</p>
             <p>{{ review.content }}</p>
         %end

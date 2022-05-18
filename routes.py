@@ -192,7 +192,7 @@ def catalog(filter: str = 'recent'):
 
 @route('/reg', method='post')
 def registration():
-    name = request.forms.getunicodeunicode('name')
+    name = request.forms.getunicode('name')
     email = request.forms.getunicode('email')
     password = request.forms.getunicode('pass')
 
@@ -287,14 +287,17 @@ def logout():
 @view('active')
 def active():
     from orm import User, Review, func
+    from sqlalchemy import desc, text
 
     with Session(db) as session:
         return {
-            'title': 'Активные пользователи',
+            'title': 'ТОП-10 Активных пользователей',
             'users': session.execute(session.query(User, func.count(Review.id))
                                      .select_from(Review)
                                      .join(User)
-                                     .group_by(User)).fetchall(),
+                                     .group_by(User)
+                                     .order_by(desc(text("count_1")))
+                                     .limit(10)).fetchall(),
             'year': datetime.now().year,
             'request': request,
         }
