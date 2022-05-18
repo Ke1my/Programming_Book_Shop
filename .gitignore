@@ -44,5 +44,7 @@ venv.bak/
 .sqlite
 .suo/
 .vs/*
+.vscode/
+
 # Project
 CoolBookDatabase.db

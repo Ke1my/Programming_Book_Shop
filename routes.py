@@ -7,7 +7,8 @@ from bottle import route, view, abort, response, post, request, redirect
 from datetime import datetime
 from sqlalchemy.orm import Session
 import argon2
-import utils
+
+from utils import check_email
 import orm
 
 COOKIE_SECRET = 'RZIcY0t8FMsTuHEI6HDm1w$J01bVVqbsXDgAcRj7znMlCQ01Ak51OU21bR+/0qujXk'
@@ -192,10 +193,14 @@ def catalog(filter: str = 'recent'):
 @route('/reg', method='post')
 def registration():
     name = request.forms.getunicodeunicode('name')
-    mail = request.forms.getunicode('email')
+    email = request.forms.getunicode('email')
     password = request.forms.getunicode('pass')
+
+    if not check_email(email):
+        return "Bad email"
+
     with Session(db) as session:
-        user = orm.User(name=name, email=mail,
+        user = orm.User(name=name, email=email,
                         password=orm.Hasher.hash(password))
         session.add(user)
         session.commit()
@@ -206,6 +211,10 @@ def registration():
 def auth_post():
     password = request.forms.getunicode('pass')
     email = request.forms.getunicode('email')
+
+    if not check_email(email):
+        return "Bad email"
+
     with Session(db) as session:
         user = session.execute(orm.query_select_user_by_email(email)).scalar()
         if user is None:
