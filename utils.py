@@ -18,11 +18,18 @@ def check_password_weakness(password: str) -> bool:
     return False
 
 
-def review_is_valid(mark, content):
-    if mark is None or\
-            mark == '' or\
-            content is None or\
-            content == '':
+def check_mark(mark: int) -> bool:
+    if not mark.isnumeric():
+        return False
+    elif not 0 <= int(mark) <= 10:
         return False
     else:
         return True
+
+
+USER_REGEX = re.compile(
+    r"^[a-zA-Zа-яА-Я]{1,20}$")
+
+
+def check_username(name: str) -> bool:
+    return USER_REGEX.match(name) is not None
