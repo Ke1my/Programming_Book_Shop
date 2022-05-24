@@ -8,7 +8,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 import argon2
 
-from utils import check_email, check_password_weakness
+from utils import check_email, check_password_weakness, check_username, check_mark
 import orm
 
 COOKIE_SECRET = 'RZIcY0t8FMsTuHEI6HDm1w$J01bVVqbsXDgAcRj7znMlCQ01Ak51OU21bR+/0qujXk'
@@ -202,6 +202,9 @@ def registration():
     if not check_password_weakness(password):
         return "Weak password"
 
+    if not check_username(name):
+        return "invalide username"
+
     with Session(db) as session:
         user = orm.User(name=name, email=email,
                         password=orm.Hasher.hash(password))
@@ -247,6 +250,8 @@ def review():
 
     mark = request.forms.getunicode('review-mark')
     content = request.forms.getunicode('review-content')
+    if check_username(mark):
+        return "invalide mark"
     with Session(db) as session:
         newreview = orm.Review(mark=mark, user=user.id,
                                book=book, content=content)
