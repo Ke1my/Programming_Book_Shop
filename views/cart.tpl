@@ -27,8 +27,12 @@
     
     %if len(user.cart_rel) != 0:
     <form action="/confirm" method="post">
+        <!-- Поля с адресом и номером телефона -->
+        <label class="form-label">Телефон</label>
         <input type="text" class="form-control" name="phone_number" style="min-width: 100%;" required>
-        <input type="text" class="form-control" name="email_adress" style="min-width: 100%;" required>
+        <br/>
+        <label class="form-label">Адресс</label>
+        <input type="text" class="form-control" name="adress" style="min-width: 100%;" required>
         <button type="submit" class="btn btn-primary">Оформить заказ</button>
     </form>
     %end

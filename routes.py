@@ -8,7 +8,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 import argon2
 
-from utils import check_email, check_password_weakness, check_username, check_mark
+from utils import check_email, check_password_weakness, check_username, check_mark, check_phone, cart_is_valid
 import orm
 
 COOKIE_SECRET = 'RZIcY0t8FMsTuHEI6HDm1w$J01bVVqbsXDgAcRj7znMlCQ01Ak51OU21bR+/0qujXk'
@@ -262,26 +262,32 @@ def review():
 
 @route('/confirm', method='post')
 def review():
+    # Взятие данных из полей страницы
+    phone = request.forms.getunicode('phone_number')
+    adress = request.forms.getunicode('adress')
     user = request.forms.getunicode('user')
-    # Try to check something
-    with Session(db) as session:
-        user = session.execute(orm.query_select_user_by_password(
-            request.get_cookie('userhash', secret=COOKIE_SECRET))).scalar()
-        user.cart_rel.clear()
-        session.commit()
-    return redirect('/profile')
+
+    if (check_phone(phone) and cart_is_valid(phone, adress)): # Проверка на пустые значения и правильный формат телефона
+        with Session(db) as session: #Открытие сессии в бд
+            user = session.execute(orm.query_select_user_by_password( #Получение пользователя
+                request.get_cookie('userhash', secret=COOKIE_SECRET))).scalar()
+            user.cart_rel.clear() #Очищение карзины
+            session.commit() # Фиксация изменений
+        return redirect('/profile') # Переход на страницу с профилем
+    else:
+        return redirect('/cart') # Переход на страницу с корзиной
 
 
 @route('/add', method='post')
 def add():
-    code = request.forms.getunicode('book')
-    with Session(db) as session:
-        book = session.execute(orm.query_select_book(code)).scalar()
-        user = session.execute(orm.query_select_user_cart_by_password(
+    code = request.forms.getunicode('book')# Взятие данных из полей страницы
+    with Session(db) as session: #Открытие сессии в бд
+        book = session.execute(orm.query_select_book(code)).scalar()  # Получение книги
+        user = session.execute(orm.query_select_user_cart_by_password( #Получение пользователя
             request.get_cookie('userhash', secret=COOKIE_SECRET))).scalar()
-        user.cart_rel.append(book)
-        session.commit()
-    return redirect("/catalog")
+        user.cart_rel.append(book) # Добавление книги
+        session.commit()  # Фиксация изменений
+    return redirect("/catalog") # Переход  в каталог
 
 
 @route('/logout')
