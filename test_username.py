@@ -10,6 +10,7 @@ class UserTest(unittest.TestCase):
             "Nikita",
             "Тимур",
             "Андрей",
+            "Kelmy"
         ]
 
         for name in cases:

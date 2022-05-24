@@ -1,6 +1,11 @@
 from string import digits, ascii_uppercase, ascii_lowercase
 import re
 
+
+USER_REGEX = re.compile(
+    r"^[a-zA-Zа-яА-Я]{1,20}$")
+
+
 EMAIL_REGEX = re.compile(
     r"^((?!\.)[a-z0-9.]{1,64}(?<!\.))@((?!-)[a-z0-9-]{1,63}(?<!-)\.)+[a-z]{2,6}$")
 
@@ -25,10 +30,6 @@ def check_mark(mark: int) -> bool:
         return False
     else:
         return True
-
-
-USER_REGEX = re.compile(
-    r"^[a-zA-Zа-яА-Я]{1,20}$")
 
 
 def check_username(name: str) -> bool:
