@@ -46,6 +46,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ review.user_rel.name }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Оценка: {{ review.mark }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ review.datetime }}</h6>
                             <p class="card-text">{{ review.content }}</p>
                         </div>
                     </div>

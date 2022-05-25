@@ -1,6 +1,7 @@
 from argon2 import PasswordHasher
 from sqlalchemy import Column, ForeignKey, INTEGER, TEXT, REAL, BLOB, create_engine, event, \
     UniqueConstraint, Table, select, func
+from datetime import datetime
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import declarative_base, relationship, selectinload, Query
 
@@ -99,6 +100,7 @@ class Review(Base):
     user = Column(INTEGER, ForeignKey("User.id"))
     book = Column(INTEGER, ForeignKey("Book.id"))
     content = Column(TEXT, nullable=False)
+    datetime = Column(TEXT, nullable=False)
 
     # Contraint
     uix_user_book = UniqueConstraint("user", "book", name="uix_user_book")

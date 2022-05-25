@@ -254,7 +254,7 @@ def review():
         return "invalide mark"
     with Session(db) as session:
         newreview = orm.Review(mark=mark, user=user.id,
-                               book=book, content=content)
+                               book=book, content=content,datetime = datetime.now().strftime("%Y-%m-%d %H:%M"))
         session.add(newreview)
         session.commit()
     return redirect(f'/book/{book}')
